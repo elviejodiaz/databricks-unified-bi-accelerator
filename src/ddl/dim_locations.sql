@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS ${bundle.variables.target_catalog}.${bundle.variables
     country STRING NOT NULL,
     region STRING NOT NULL COMMENT 'Regional territory breakdown',
     latitude DOUBLE NOT NULL COMMENT 'Geospatial coordinate node',
-    longitude DOUBLE NOT NULL COMMENT 'Geospatial coordinate node'
+    longitude DOUBLE NOT NULL COMMENT 'Geospatial coordinate node',
+    -- Informational Primary Key mapping for catalog relations
+    CONSTRAINT location_pk PRIMARY KEY(location_id) RELY
 )
 USING DELTA
 COMMENT 'Geographic location lookup parameters for map rendering and spatial groupings.';
