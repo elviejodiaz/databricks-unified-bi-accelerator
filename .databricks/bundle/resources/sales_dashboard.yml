@@ -1,0 +1,19 @@
+# =====================================================================================
+# Title                : Sales Dashboard Resource Mapping
+# Bundle               : databricks-unified-bi-accelerator
+# Author               : elviejodiaz
+# Purpose/Description  : Declares the Lakeview Dashboard resource asset within the bundle
+#                        and maps it to its corresponding declarative JSON layout file.
+# Note                 : Dynamically binds the target environment's SQL Warehouse ID 
+#                        using bundle token variables at deployment runtime.
+# Dependency           : ./sales_performance.lvdash.json
+# Asset Type           : Databricks Native Dashboard (Lakeview)
+# Governance Layer     : Managed via Unity Catalog Compute Access
+# =====================================================================================
+
+resources:
+  dashboards:
+    sales_performance_dashboard:
+      display_name: "Sales Performance Analytics"
+      file_path: ./sales_performance.lvdash.json
+      warehouse_id: ${bundle.variables.sql_warehouse_id}
