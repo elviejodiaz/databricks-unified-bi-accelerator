@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS ${bundle.variables.target_catalog}.${bundle.variables
     customer_id STRING NOT NULL COMMENT 'Primary key of the customer',
     customer_name STRING NOT NULL,
     customer_segment STRING NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    updated_at TIMESTAMP NOT NULL,
+    -- Declare the informational Primary Key for Unity Catalog mapping
+    CONSTRAINT customer_pk PRIMARY KEY(customer_id) RELY
 )
 USING DELTA
 TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true')
