@@ -1,0 +1,62 @@
+# =====================================================================================
+# Title                : GitHub Actions Continuous Integration (CI) Workflow
+# Bundle               : databricks-unified-bi-accelerator
+# Author               : elviejodiaz
+# Purpose/Description  : Automates syntax verification, configuration compilation, and 
+#                        structural integrity testing for Databricks Asset Bundles (DABs).
+# Note                 : Runs automatically on push or pull requests to development and 
+#                        main branches to block syntactically broken assets from merging.
+# Framework version    : GitHub Actions Workflow Configuration v2
+# Core Runtime Tool    : Databricks CLI Asset Bundle Engine
+# =====================================================================================
+
+name: "Databricks Asset Bundle Verification Pipeline"
+
+# Trigger compilation validations automatically on code modification events
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  validate-bundle-architecture:
+    name: "Execute Asset Bundle Validation"
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Clone the repository files directly into the virtual environment runner
+      - name: Fetch Portfolio Source Code
+        uses: actions/checkout@v4
+
+      # Step 2: Download and configure the official, production-ready Databricks CLI tool
+      - name: Initialize Databricks CLI Environment
+        uses: databricks/setup-cli@v0.2.0
+
+      # Step 3: Compile and validate the bundle structure against target environments
+      # This checks databricks.yml syntax, dynamic variable mappings, and resource declarations
+      - name: Run Structural Bundle Validation Checks
+        run: |
+          echo "Initiating multi-environment architecture validation..."
+          
+          # Navigate into the bundle directory containing your configurations
+          cd .databricks/bundle
+          
+          # Instruct the CLI engine to compile and check the structural health of the setup
+          databricks bundle validate
+        env:
+          # Simulated pipeline environment targets. In production, these map to safe 
+          # GitHub encrypted Repository Secrets (e.g., ${{ secrets.DATABRICKS_HOST }})
+          DATABRICKS_HOST: "https://azuredatabricks.net"
+          DATABRICKS_TOKEN: "mock_ci_pipeline_token_value_for_portfolio_validation"
+          BUNDLE_VAR_target_catalog: "portfolio_dev_catalog"
+          BUNDLE_VAR_target_schema: "retail_analytics"
+          BUNDLE_VAR_sql_warehouse_id: "1111222233334444"
+
+      # Step 4: Confirm compilation parameters passed formatting rules successfully
+      - name: Validation Status Reporting
+        run: |
+          echo "=========================================================================="
+          echo " SUCCESS: Databricks Asset Bundle schema and targets validated cleanly."
+          echo " Declarative resource files match Databricks JSON schema parameters."
+          echo "=========================================================================="
