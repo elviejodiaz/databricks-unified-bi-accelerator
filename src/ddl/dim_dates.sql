@@ -1,7 +1,7 @@
 -- =====================================================================================
 -- Title                : DDL & Seed - Date Dimension Table
 -- Bundle               : databricks-unified-bi-accelerator
--- Author               : [Your Name / GitHub Handle]
+-- Author               : elviejodiaz
 -- Purpose/Description  : Creates the time intelligence lookup table and populates it
 --                        with calendar baseline references.
 -- =====================================================================================
