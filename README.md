@@ -1,9 +1,11 @@
 # 🏢 Unified Enterprise Lakehouse BI Accelerator
 
-[![Databricks](https://shields.io)](https://databricks.com)
-[![CI Pipeline](https://shields.io)](https://github.com)
-[![Language](https://shields.io)](https://apache.org)
-[![Applied AI](https://shields.io)](https://databricks.com)
+| Architecture Layer | Core Technology Stack | Framework Component |
+| :--- | :--- | :--- |
+| **🚀 Governance & Storage** | Azure Databricks Unity Catalog | Delta Lake Semantic Star Schema |
+| **🔄 DevOps & IaC** | Databricks Asset Bundles (DABs) | Automated Multi-Environment Deployments |
+| **📊 Analytical Semantic View** | Native Lakeview Canvas Framework | Declarative Multi-Widget Grid Layout |
+| **🧠 Intelligent Business AI** | Databricks Genie Spaces | Guardrailed Text-to-SQL Interface |
 
 An enterprise-grade, Infrastructure-as-Code (IaC) architectural blueprint designed to completely eliminate decentralized Business Intelligence reporting silos and structural data duplication. This framework establishes a unified, high-performance Star Schema semantic layer natively within **Azure Databricks Unity Catalog**, serving declarative **Lakeview Dashboards** and orchestrating autonomous text-to-SQL conversational business analytics through **Genie AI Spaces**.
 
