@@ -1,0 +1,136 @@
+{
+  "__metadata_header__": [
+    "=====================================================================================",
+    "Title                : Enterprise-Grade Interactive Sales & Profitability Dashboard",
+    "Bundle               : databricks-unified-bi-accelerator",
+    "Author               : elviejodiaz",
+    "Purpose/Description  : Fully operational layout incorporating multi-field filters, bubble",
+    "                       maps, margin scorecards, dual-channel timelines, product slices,",
+    "                       and customer leaderboards within an optimized 16-row layout matrix.",
+    "====================================================================================="
+  ],
+  "version": "1.0",
+  "pages": [
+    {
+      "name": "Executive Profitability Overview",
+      "filters": [
+        { "id": "f_year", "type": "field", "field": "calendar_year", "dataset": "Global_Sales_Semantic_Core" },
+        { "id": "f_month", "type": "field", "field": "calendar_month", "dataset": "Global_Sales_Semantic_Core" },
+        { "id": "f_product", "type": "field", "field": "product_category", "dataset": "Global_Sales_Semantic_Core" },
+        { "id": "f_location", "type": "field", "field": "region", "dataset": "Global_Sales_Semantic_Core" },
+        { "id": "f_customer", "type": "field", "field": "customer_name", "dataset": "Global_Sales_Semantic_Core" }
+      ],
+      "widgets": [
+        {
+          "id": "w_header",
+          "type": "text",
+          "position": { "x": 0, "y": 0, "w": 12, "h": 1 },
+          "options": { "markdown": "# 🏢 Global Commerce Revenue & Margin Optimization Hub\n*Interactive asset compiled dynamically using Databricks Asset Bundles (DABs).*" }
+        },
+        {
+          "id": "kpi_gross_sales",
+          "type": "counter",
+          "title": "Gross Sales Value",
+          "position": { "x": 0, "y": 1, "w": 4, "h": 2 },
+          "dataset": "Global_Sales_Semantic_Core",
+          "options": { "value_column": "gross_sales", "aggregation": "SUM" }
+        },
+        {
+          "id": "kpi_net_revenue",
+          "type": "counter",
+          "title": "Net Revenue (Sales - Cost)",
+          "position": { "x": 4, "y": 1, "w": 4, "h": 2 },
+          "dataset": "Global_Sales_Semantic_Core",
+          "options": { "value_column": "net_revenue", "aggregation": "SUM" }
+        },
+        {
+          "id": "kpi_margin_pct",
+          "type": "counter",
+          "title": "Blended Profit Margin (%)",
+          "position": { "x": 8, "y": 1, "w": 4, "h": 2 },
+          "dataset": "Global_Sales_Semantic_Core",
+          "options": { "value_column": "profit_margin_pct", "aggregation": "AVG" }
+        },
+        {
+          "id": "map_regional_bubbles",
+          "type": "map",
+          "title": "Sales Distribution & Volume Intensity by Region",
+          "position": { "x": 0, "y": 3, "w": 6, "h": 4 },
+          "dataset": "Global_Sales_Semantic_Core",
+          "options": {
+            "mode": "bubble",
+            "latitude_column": "latitude",
+            "longitude_column": "longitude",
+            "size_column": "gross_sales",
+            "tooltip_columns": ["region", "gross_sales", "net_revenue"]
+          }
+        },
+        {
+          "id": "chart_top_customers",
+          "type": "bar",
+          "title": "Top 5 Enterprise Customers by Gross Sales",
+          "position": { "x": 6, "y": 3, "w": 6, "h": 4 },
+          "dataset": "Top_Customers_Leaderboard",
+          "options": {
+            "x_column": "customer_name",
+            "y_columns": ["customer_gross_sales"],
+            "orientation": "horizontal"
+          }
+        },
+        {
+          "id": "chart_revenue_channels",
+          "type": "bar",
+          "title": "Total Revenue Trend: Online vs Offline Channels",
+          "position": { "x": 0, "y": 7, "w": 7, "h": 4 },
+          "dataset": "Channel_Performance_Dataset",
+          "options": {
+            "x_column": "calendar_date",
+            "y_columns": ["online_revenue", "offline_revenue"],
+            "series_type": "grouped",
+            "colors": {
+              "online_revenue": "#00C49F",
+              "offline_revenue": "#0088FE"
+            }
+          }
+        },
+        {
+          "id": "chart_product_distribution",
+          "type": "pie",
+          "title": "Revenue Distribution by Product Category",
+          "position": { "x": 7, "y": 7, "w": 5, "h": 4 },
+          "dataset": "Global_Sales_Semantic_Core",
+          "options": {
+            "label_column": "product_category",
+            "value_column": "gross_sales"
+          }
+        },
+        {
+          "id": "pivot_category_matrix",
+          "type": "pivot_table",
+          "title": "Category Financial Performance Metrics",
+          "position": { "x": 0, "y": 11, "w": 12, "h": 4 },
+          "dataset": "Global_Sales_Semantic_Core",
+          "options": {
+            "rows": ["product_category"],
+            "columns": ["sales_channel"],
+            "values": ["gross_sales", "net_revenue"]
+          }
+        }
+      ]
+    }
+  ],
+  "datasets": [
+    {
+      "name": "Global_Sales_Semantic_Core",
+      "query": "SELECT f.sale_id, c.customer_name, p.product_category, l.region, l.latitude, l.longitude, d.calendar_year, d.calendar_month, f.sales_channel, f.total_amount as gross_sales, (f.total_amount - (p.unit_cost * f.quantity)) as net_revenue, (((f.total_amount - (p.unit_cost * f.quantity)) / f.total_amount) * 100) as profit_margin_pct FROM ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.fact_sales f INNER JOIN ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_customers c ON f.customer_id = c.customer_id INNER JOIN ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_products p ON f.product_id = p.product_id INNER JOIN ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_locations l ON f.location_id = l.location_id INNER JOIN ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_dates d ON f.date_id = d.date_id"
+    },
+    {
+      "name": "Top_Customers_Leaderboard",
+      "query": "SELECT c.customer_name, SUM(f.total_amount) as customer_gross_sales FROM ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.fact_sales f INNER JOIN ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_customers c ON f.customer_id = c.customer_id GROUP BY c.customer_name ORDER BY customer_gross_sales DESC LIMIT 5"
+    },
+    {
+      "name": "Channel_Performance_Dataset",
+      "query": "SELECT d.calendar_date, SUM(CASE WHEN f.sales_channel = 'ONLINE' THEN f.total_amount ELSE 0 END) as online_revenue, SUM(CASE WHEN f.sales_channel = 'OFFLINE' THEN f.total_amount ELSE 0 END) as offline_revenue FROM ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.fact_sales f INNER JOIN ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_dates d ON f.date_id = d.date_id GROUP BY d.calendar_date ORDER BY d.calendar_date ASC"
+    }
+  ]
+}
