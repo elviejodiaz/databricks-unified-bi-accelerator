@@ -117,7 +117,7 @@ The orchestration script within `src/notebooks/setup_genie_space.py` interacts p
 
 Once the declarative bundle code is compiled and pushed to a target workspace environment via the Databricks CLI, the unified layout grid configures automatically. Below is the operational interface generated directly by the underlying `.lvdash.json` parameters:
 
-![Databricks SQL Dashboard UI Rendered](https://githubusercontent.com)
+![Databricks SQL Dashboard UI Rendered](Dashboard.png)
 
 ### Core UI Component Matrix:
 * **Interactive Global Filter Header:** Provides unified multi-field dropdown parameters (`Year`, `Month`, `Product Category`, `Region`, `Customer Name`) applying real-time, cross-widget filter cascades.
