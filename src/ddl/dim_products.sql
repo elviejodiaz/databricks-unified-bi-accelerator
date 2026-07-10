@@ -12,10 +12,12 @@ CREATE TABLE IF NOT EXISTS ${bundle.variables.target_catalog}.${bundle.variables
     product_category STRING NOT NULL,
     sku STRING NOT NULL,
     unit_price DOUBLE NOT NULL COMMENT 'Selling price point per unit',
-    unit_cost DOUBLE NOT NULL COMMENT 'Base cost per unit'
+    unit_cost DOUBLE NOT NULL COMMENT 'Base cost per unit',
+    -- Informational Primary Key mapping for catalog relations
+    CONSTRAINT product_pk PRIMARY KEY(product_id) RELY
 )
 USING DELTA
-COMMENT 'Dimension table containing product definitions and core cost baselines.';
+COMMENT 'Dimension table containing product definitions and core cost baselines.
 
 -- Seed Statement for Mock Financial Inventory
 INSERT OVERWRITE ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_products VALUES
