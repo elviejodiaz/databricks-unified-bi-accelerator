@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS ${bundle.variables.target_catalog}.${bundle.variables
     calendar_year INT NOT NULL,
     calendar_month INT NOT NULL,
     calendar_quarter STRING NOT NULL,
-    day_of_week STRING NOT NULL
+    day_of_week STRING NOT NULL,
+    -- Informational Primary Key mapping for catalog relations
+    CONSTRAINT date_pk PRIMARY KEY(date_id) RELY
 )
 USING DELTA
 COMMENT 'Standard time intelligence dimension table.';
