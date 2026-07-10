@@ -12,9 +12,14 @@ CREATE TABLE IF NOT EXISTS ${bundle.variables.target_catalog}.${bundle.variables
     product_id STRING NOT NULL COMMENT 'FK to dim_products',
     location_id STRING NOT NULL COMMENT 'FK to dim_locations',
     date_id INT NOT NULL COMMENT 'FK to dim_dates',
-    sales_channel STRING NOT NULL COMMENT 'ONLINE or OFFLINE operational vectors',
+    sales_channel STRING NOT NULL,
     quantity INT NOT NULL,
-    total_amount DOUBLE NOT NULL COMMENT 'Gross sales value calculated as unit_price * quantity'
+    total_amount DOUBLE NOT NULL,
+    -- Map relationships cleanly out to your dimensions using informational clauses
+    CONSTRAINT sales_customer_fk FOREIGN KEY (customer_id) REFERENCES ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_customers(customer_id) NOT ENFORCED,
+    CONSTRAINT sales_product_fk FOREIGN KEY (product_id) REFERENCES ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_products(product_id) NOT ENFORCED,
+    CONSTRAINT sales_location_fk FOREIGN KEY (location_id) REFERENCES ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_locations(location_id) NOT ENFORCED,
+    CONSTRAINT sales_date_fk FOREIGN KEY (date_id) REFERENCES ${bundle.variables.target_catalog}.${bundle.variables.target_schema}.dim_dates(date_id) NOT ENFORCED
 )
 USING DELTA
 COMMENT 'Fact table storing granular financial commerce transactions.';
