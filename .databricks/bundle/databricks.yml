@@ -1,0 +1,63 @@
+# =====================================================================================
+# Title                : Databricks Asset Bundle Global Configuration
+# Bundle               : databricks-unified-bi-accelerator
+# Author               : elviejodiaz
+# Purpose/Description  : Defines the root asset bundle configuration, global variables,
+#                        and multi-environment environment targets (Dev, QA, Prd).
+# Note                 : Utilizes Service Principals for non-development targets to 
+#                        comply with production-grade enterprise CI/CD standards.
+# Framework Version    : Databricks CLI Asset Bundles v1.0
+# Target Ecosystem     : Azure Databricks Unity Catalog
+# Deployment Type      : Infrastructure as Code (IaC)
+# =====================================================================================
+
+bundle:
+  name: databricks-unified-bi-accelerator
+
+# Define variables with default values to be overriden by targets
+variables:
+  target_catalog:
+    description: "Target Unity Catalog for data schemas"
+    default: main
+  target_schema:
+    description: "Target Schema for the analytical semantic model"
+    default: analytics_silver
+  sql_warehouse_id:
+    description: "The SQL Warehouse ID powering dashboards and Genie"
+    default: 0000000000000000
+
+# Tell the bundle to include all resource definitions inside the resources folder
+include:
+  - resources/*.yml
+
+targets:
+  # Development Environment (Developer Sandbox)
+  dev:
+    workspace:
+      host: https://azuredatabricks.net
+    mode: development
+    variables:
+      target_catalog: dev_catalog
+      target_schema: retail_analytics
+      sql_warehouse_id: 1111222233334444
+
+  # QA Environment (Pre-production Validation)
+  qa:
+    workspace:
+      host: https://azuredatabricks.net
+      # Service Principal configuration for enterprise automation
+      client_id: 00000000-0000-0000-0000-000000000000 
+    variables:
+      target_catalog: qa_catalog
+      target_schema: retail_analytics
+      sql_warehouse_id: 5555666677778888
+
+  # Production Environment (Live Corporate Data)
+  prd:
+    workspace:
+      host: https://azuredatabricks.net
+      client_id: 11111111-1111-1111-1111-111111111111
+    variables:
+      target_catalog: prod_catalog
+      target_schema: retail_analytics
+      sql_warehouse_id: 9999000011112222
