@@ -1,1 +1,15 @@
-src/ddl/*.sql linguist-language=SQL
+# =====================================================================================
+# Title                : GitHub Linguist Overrides (.gitattributes)
+# Bundle               : databricks-unified-bi-accelerator
+# Purpose/Description  : Overrides default data classification filters to force GitHub 
+#                        to calculate SQL and YAML files inside the language bar stats.
+# =====================================================================================
+
+# Force SQL files to be indexed and counted as programming files
+*.sql linguist-detectable=true
+*.sql linguist-language=SQL
+
+# Force YAML bundle configurations to be indexed and counted as markup files
+*.yml linguist-detectable=true
+*.yml linguist-language=YAML
+
