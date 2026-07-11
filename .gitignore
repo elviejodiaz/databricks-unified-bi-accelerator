@@ -1,0 +1,35 @@
+# =====================================================================================
+# Title                : Git Tracking Exclusion Configuration (.gitignore)
+# Bundle               : databricks-unified-bi-accelerator
+# Author               : elviejodiaz
+# Purpose/Description  : Excludes local state, secrets, and IDE caches from Git commits.
+# =====================================================================================
+
+# Databricks Local Assets & Deployment Caches
+.databricks/
+.bundle/
+out/
+target/
+
+# Python Cache & Compilation Noise
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# IDE Configuration & Workspace Environments
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# System Logs & Metadata Overlays
+*.log
+.DS_Store
+Thumbs.db
